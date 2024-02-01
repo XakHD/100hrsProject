@@ -16,8 +16,16 @@ export const demoCredentials = {
     password: "demodemo",
 };
 
+interface LoginParams {
+    email: string;
+    providerName:string;
+    accessToken: string;
+    refreshToken: string;
+}
+
 export const authProvider: AuthProvider = {
-    login: async ({ email, providerName, accessToken, refreshToken }) => {
+    // login: async ({ email, providerName, accessToken, refreshToken }) => {
+    login: async ({ email, providerName, accessToken, refreshToken }: LoginParams) => {
         if (accessToken && refreshToken) {
             client.setHeaders({
                 Authorization: `Bearer ${accessToken}`,
