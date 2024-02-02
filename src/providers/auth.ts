@@ -1,223 +1,225 @@
-import { AuthProvider } from "@refinedev/core";
 
-import type { User } from "@/graphql/schema.types";
-import { disableAutoLogin, enableAutoLogin } from "@/hooks";
+// import { AuthProvider } from "@refinedev/core";
 
-import { API_BASE_URL, API_URL, client, dataProvider } from "./data";
 
-export const emails = [
+// import type { User } from "@/graphql/schema.types";
+// import { disableAutoLogin, enableAutoLogin } from "@/hooks";
 
-];
+// import { API_BASE_URL, API_URL, client, dataProvider } from "./data";
 
-const randomEmail = emails[Math.floor(Math.random() * emails.length)];
+// export const emails = [
 
-export const demoCredentials = {
-    email: randomEmail,
-    password: "demodemo",
-};
+// ];
 
-interface LoginParams {
-    email: string;
-    providerName:string;
-    accessToken: string;
-    refreshToken: string;
-}
+// const randomEmail = emails[Math.floor(Math.random() * emails.length)];
 
-export const authProvider: AuthProvider = {
-    // login: async ({ email, providerName, accessToken, refreshToken }) => {
-    login: async ({ email, providerName, accessToken, refreshToken }: LoginParams) => {
-        if (accessToken && refreshToken) {
-            client.setHeaders({
-                Authorization: `Bearer ${accessToken}`,
-            });
+// export const demoCredentials = {
+//     email: randomEmail,
+//     password: "demodemo",
+// };
 
-            localStorage.setItem("access_token", accessToken);
-            localStorage.setItem("refresh_token", refreshToken);
+// interface LoginParams {
+//     email: string;
+//     providerName:string;
+//     accessToken: string;
+//     refreshToken: string;
+// }
 
-            return {
-                success: true,
-                redirectTo: "/",
-            };
-        }
+// export const authProvider: AuthProvider = {
+//     // login: async ({ email, providerName, accessToken, refreshToken }) => {
+//     login: async ({ email, providerName, accessToken, refreshToken }: LoginParams) => {
+//         if (accessToken && refreshToken) {
+//             client.setHeaders({
+//                 Authorization: `Bearer ${accessToken}`,
+//             });
 
-        if (providerName) {
-            window.location.href = `${API_BASE_URL}/auth/${providerName}`;
+//             localStorage.setItem("access_token", accessToken);
+//             localStorage.setItem("refresh_token", refreshToken);
 
-            return {
-                success: true,
-            };
-        }
+//             return {
+//                 success: true,
+//                 redirectTo: "/",
+//             };
+//         }
 
-        try {
-            const { data } = await dataProvider.custom({
-                url: API_URL,
-                method: "post",
-                headers: {},
-                meta: {
-                    variables: { email },
-                    rawQuery: `
-                mutation Login($email: String!) {
-                    login(loginInput: {
-                      email: $email
-                    }) {
-                      accessToken,
-                      refreshToken
-                    }
-                  }
-                `,
-                },
-            });
+//         if (providerName) {
+//             window.location.href = `${API_BASE_URL}/auth/${providerName}`;
 
-            client.setHeaders({
-                Authorization: `Bearer ${data.login.accessToken}`,
-            });
+//             return {
+//                 success: true,
+//             };
+//         }
 
-            enableAutoLogin(email);
-            localStorage.setItem("access_token", data.login.accessToken);
-            localStorage.setItem("refresh_token", data.login.refreshToken);
+//         try {
+//             const { data } = await dataProvider.custom({
+//                 url: API_URL,
+//                 method: "post",
+//                 headers: {},
+//                 meta: {
+//                     variables: { email },
+//                     rawQuery: `
+//                 mutation Login($email: String!) {
+//                     login(loginInput: {
+//                       email: $email
+//                     }) {
+//                       accessToken,
+//                       refreshToken
+//                     }
+//                   }
+//                 `,
+//                 },
+//             });
 
-            return {
-                success: true,
-                redirectTo: "/",
-            };
-        } catch (error: any) {
-            return {
-                success: false,
-                error: {
-                    message:
-                        "message" in error ? error.message : "Login failed",
-                    name:
-                        "name" in error
-                            ? error.name
-                            : "Invalid email or password",
-                },
-            };
-        }
-    },
-    register: async ({ email, password }) => {
-        try {
-            await dataProvider.custom({
-                url: API_URL,
-                method: "post",
-                headers: {},
-                meta: {
-                    variables: { email, password },
-                    rawQuery: `
-                mutation register($email: String!, $password: String!) {
-                    register(registerInput: {
-                      email: $email
-                        password: $password
-                    }) {
-                        id
-                        email
-                    }
-                  }
-                `,
-                },
-            });
+//             client.setHeaders({
+//                 Authorization: `Bearer ${data.login.accessToken}`,
+//             });
 
-            enableAutoLogin(email);
+//             enableAutoLogin(email);
+//             localStorage.setItem("access_token", data.login.accessToken);
+//             localStorage.setItem("refresh_token", data.login.refreshToken);
 
-            return {
-                success: true,
-                redirectTo: `/login?email=${email}`,
-            };
-        } catch (error: any) {
-            return {
-                success: false,
-                error: {
-                    message:
-                        "message" in error ? error.message : "Register failed",
-                    name:
-                        "name" in error
-                            ? error.name
-                            : "Invalid email or password",
-                },
-            };
-        }
-    },
-    logout: async () => {
-        client.setHeaders({
-            Authorization: "",
-        });
+//             return {
+//                 success: true,
+//                 redirectTo: "/",
+//             };
+//         } catch (error: any) {
+//             return {
+//                 success: false,
+//                 error: {
+//                     message:
+//                         "message" in error ? error.message : "Login failed",
+//                     name:
+//                         "name" in error
+//                             ? error.name
+//                             : "Invalid email or password",
+//                 },
+//             };
+//         }
+//     },
+//     register: async ({ email, password }) => {
+//         try {
+//             await dataProvider.custom({
+//                 url: API_URL,
+//                 method: "post",
+//                 headers: {},
+//                 meta: {
+//                     variables: { email, password },
+//                     rawQuery: `
+//                 mutation register($email: String!, $password: String!) {
+//                     register(registerInput: {
+//                       email: $email
+//                         password: $password
+//                     }) {
+//                         id
+//                         email
+//                     }
+//                   }
+//                 `,
+//                 },
+//             });
 
-        disableAutoLogin();
-        localStorage.removeItem("access_token");
-        localStorage.removeItem("refresh_token");
+//             enableAutoLogin(email);
 
-        return {
-            success: true,
-            redirectTo: "/login",
-        };
-    },
-    onError: async (error) => {
-        console.error(error);
-        return { error };
-    },
-    check: async () => {
-        try {
-            await dataProvider.custom({
-                url: API_URL,
-                method: "post",
-                headers: {},
-                meta: {
-                    rawQuery: `
-                    query Me {
-                        me {
-                          name
-                        }
-                      }
-                `,
-                },
-            });
+//             return {
+//                 success: true,
+//                 redirectTo: `/login?email=${email}`,
+//             };
+//         } catch (error: any) {
+//             return {
+//                 success: false,
+//                 error: {
+//                     message:
+//                         "message" in error ? error.message : "Register failed",
+//                     name:
+//                         "name" in error
+//                             ? error.name
+//                             : "Invalid email or password",
+//                 },
+//             };
+//         }
+//     },
+//     logout: async () => {
+//         client.setHeaders({
+//             Authorization: "",
+//         });
 
-            return {
-                authenticated: true,
-            };
-        } catch (error) {
-            return {
-                authenticated: false,
-            };
-        }
-    },
-    forgotPassword: async () => {
-        return {
-            success: true,
-            redirectTo: "/update-password",
-        };
-    },
-    updatePassword: async () => {
-        return {
-            success: true,
-            redirectTo: "/login",
-        };
-    },
-    getIdentity: async () => {
-        try {
-            const { data } = await dataProvider.custom<{ me: User }>({
-                url: API_URL,
-                method: "post",
-                headers: {},
-                meta: {
-                    rawQuery: `
-                    query Me {
-                        me {
-                            id,
-                            name,
-                            email,
-                            phone,
-                            jobTitle,
-                            timezone
-                            avatarUrl
-                        }
-                      }
-                `,
-                },
-            });
+//         disableAutoLogin();
+//         localStorage.removeItem("access_token");
+//         localStorage.removeItem("refresh_token");
 
-            return data.me;
-        } catch (error) {
-            return undefined;
-        }
-    },
-};
+//         return {
+//             success: true,
+//             redirectTo: "/login",
+//         };
+//     },
+//     onError: async (error) => {
+//         console.error(error);
+//         return { error };
+//     },
+//     check: async () => {
+//         try {
+//             await dataProvider.custom({
+//                 url: API_URL,
+//                 method: "post",
+//                 headers: {},
+//                 meta: {
+//                     rawQuery: `
+//                     query Me {
+//                         me {
+//                           name
+//                         }
+//                       }
+//                 `,
+//                 },
+//             });
+
+//             return {
+//                 authenticated: true,
+//             };
+//         } catch (error) {
+//             return {
+//                 authenticated: false,
+//             };
+//         }
+//     },
+//     forgotPassword: async () => {
+//         return {
+//             success: true,
+//             redirectTo: "/update-password",
+//         };
+//     },
+//     updatePassword: async () => {
+//         return {
+//             success: true,
+//             redirectTo: "/login",
+//         };
+//     },
+//     getIdentity: async () => {
+//         try {
+//             const { data } = await dataProvider.custom<{ me: User }>({
+//                 url: API_URL,
+//                 method: "post",
+//                 headers: {},
+//                 meta: {
+//                     rawQuery: `
+//                     query Me {
+//                         me {
+//                             id,
+//                             name,
+//                             email,
+//                             phone,
+//                             jobTitle,
+//                             timezone
+//                             avatarUrl
+//                         }
+//                       }
+//                 `,
+//                 },
+//             });
+
+//             return data.me;
+//         } catch (error) {
+//             return undefined;
+//         }
+//     },
+// };
