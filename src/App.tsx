@@ -93,6 +93,7 @@ const App: React.FC = () => {
                                     liveMode: "auto",
                                     syncWithLocation: true,
                                     warnWhenUnsavedChanges: true,
+                                    projectId: "6e9G9y-m7gSW5-G6aMqy"
                                 }}
                             >
                                 <Routes>
@@ -372,4 +373,3 @@ const App: React.FC = () => {
 };
 
 export default App;
-

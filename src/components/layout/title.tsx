@@ -9,8 +9,7 @@ import { Logo } from "./logo";
 
 const { useToken } = theme;
 
-//top left title
-const name = "Global Construct";
+const name = "Globex Corporation";
 
 export const Title: React.FC<RefineLayoutThemedTitleProps> = ({
     collapsed,
