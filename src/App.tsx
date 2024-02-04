@@ -3,7 +3,7 @@ import { BrowserRouter, Outlet, Route, Routes } from "react-router-dom";
 import { ErrorComponent, useNotificationProvider } from "@refinedev/antd";
 import { Authenticated, Refine } from "@refinedev/core";
 import { DevtoolsPanel, DevtoolsProvider } from "@refinedev/devtools";
-import routerProvider, {
+import routerBindings, {
     CatchAllNavigate,
     DocumentTitleHandler,
     NavigateToResource,
@@ -13,7 +13,7 @@ import routerProvider, {
 import { App as AntdApp, ConfigProvider } from "antd";
 
 import { resources, themeConfig } from "@/config";
-import { authProvider, dataProvider, liveProvider } from "@/providers";
+
 
 import { AlgoliaSearchWrapper, FullScreenLoading, Layout } from "./components";
 import { useAutoLoginForDemo } from "./hooks";
@@ -67,6 +67,17 @@ import "./styles/antd.css";
 import "./styles/fc.css";
 import "./styles/index.css";
 
+import authProvider from "./authProvider";
+import { supabaseClient } from "utilities";
+ import { dataProvider } from "@/providers";
+import {liveProvider} from "@refinedev/supabase";
+import { } from "./routes/forgot-password";
+import {  } from "./routes/login";
+import {  } from "./routes/register";
+import {  } from "./routes/update-password";
+import { AuthPage, RefineThemes, ThemedLayoutV2 } from "@refinedev/antd";
+
+
 const App: React.FC = () => {
     // This hook is used to automatically login the user.
     // We use this hook to skip the login page and demonstrate the application more quickly.
@@ -82,21 +93,41 @@ const App: React.FC = () => {
                 <ConfigProvider theme={themeConfig}>
                     <AntdApp>
                         <DevtoolsProvider>
-                            <Refine
-                                authProvider={authProvider}
-                                dataProvider={dataProvider}
-                                liveProvider={liveProvider}
+                        <Refine
+                       
+                       notificationProvider={useNotificationProvider}
+                       dataProvider={dataProvider}
+                       liveProvider={liveProvider(supabaseClient)}
+                       authProvider={authProvider}
+                       routerProvider={routerBindings}
+                       resources={resources}
+                       options={{
+                         syncWithLocation: true,
+                         warnWhenUnsavedChanges: true,
+                         useNewQueryKeys: true,
+                         projectId: "yHpdZQ-iUtMEO-up9i7p",
+                       }}
+                     >
+                              
+                       
+                       {/*  dataProvider={dataProvider}
+                                 liveProvider={liveProvider}
+                                 authProvider={authProvider}
                                 routerProvider={routerProvider}
-                                resources={resources}
-                                notificationProvider={useNotificationProvider}
-                                options={{
-                                    liveMode: "auto",
-                                    syncWithLocation: true,
-                                    warnWhenUnsavedChanges: true,
-                                    projectId: "6e9G9y-m7gSW5-G6aMqy"
-                                }}
-                            >
-                                <Routes>
+                               notificationProvider={useNotificationProvider}
+                                 options={{ 
+                                   syncWithLocation: true,
+                                warnWhenUnsavedChanges: true,
+                                  useNewQueryKeys: true,
+                                projectId: "yHpdZQ-iUtMEO-up9i7p",
+                              liveMode: "auto",
+                               syncWithLocation: true,
+                               warnWhenUnsavedChanges: true,
+                                  }} 
+                                > */}
+                                  <Routes>      
+
+                            
                                     <Route
                                         element={
                                             <Authenticated
@@ -332,17 +363,39 @@ const App: React.FC = () => {
                                             element={<ErrorComponent />}
                                         />
                                     </Route>
-                                    <Route
-                                        element={
-                                            <Authenticated
-                                                key="authenticated-auth"
-                                                fallback={<Outlet />}
-                                            >
-                                                <NavigateToResource resource="dashboard" />
-                                            </Authenticated>
-                                        }
-                                    >
-                                        <Route
+                              
+                              {/* Was in refinedevsupabase, i dont think The code actually needs it though since login is already being assigned */}
+                               {/* <Route
+                            element={
+                                <Authenticated key="someKey "fallback={<CatchAllNavigate to="/login" />}>
+                                <ThemedLayoutV2>
+                                    <Outlet />
+                                </ThemedLayoutV2>
+                                </Authenticated>
+                            }
+                            >
+                            <Route path="/posts" element={<div>dummy list page</div>} />
+                            </Route>
+                            <Route
+                            element={
+                                <Authenticated key="someKey" fallback={<Outlet />}>
+                                <NavigateToResource />
+                                </Authenticated>
+                                //Why am I getting an Issue with Authenticated having a red underline under it?
+                            }
+                            > */}
+                            {/* new layout for login for supabase */}
+                              <Route path="/login" element={<AuthPage />} />
+                            <Route path="/register" element={<AuthPage type="register" />} />
+                            <Route path="/forgot-password" element={<AuthPage type="forgotPassword" />} />
+                            <Route path="/update-password" element={<AuthPage type="updatePassword" />} />
+                            
+                                                 
+                                  
+                                  
+                                  
+                                  {/* original style from original login layout */}
+                                         {/* <Route
                                             path="/login"
                                             element={<LoginPage />}
                                         />
@@ -357,9 +410,9 @@ const App: React.FC = () => {
                                         <Route
                                             path="/update-password"
                                             element={<UpdatePasswordPage />}
-                                        />
-                                    </Route>
-                                </Routes>
+                                        />  */}
+                                  
+                                 </Routes> 
                                 <UnsavedChangesNotifier />
                                 <DocumentTitleHandler />
                             </Refine>

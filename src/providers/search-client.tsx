@@ -10,4 +10,4 @@ export const searchClient = isAlgoliaEnabled
     ? algoliasearch(ALGOLIA_APP_ID, ALGOLIA_API_KEY)
     : false;
 
-export const indexName = "refine-crm";
+export const indexName = "globalconstruct";
