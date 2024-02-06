@@ -3,7 +3,11 @@ import { AuthProvider } from "@refinedev/core";
 import type { User } from "@/graphql/schema.types";
 import { disableAutoLogin, enableAutoLogin } from "@/hooks";
 
-import { API_BASE_URL, API_URL, client, dataProvider } from "./data";
+// import { API_BASE_URL, API_URL, client, dataProvider } from "./data";
+import { API_BASE_URL, API_URL } from "./data";
+import { dataProvider, supabase, client, liveProvider } from "./data";
+import { supabaseUrl, supabaseKey } from "./data/index";
+
 
 export const emails = [
     "michael.scott@dundermifflin.com",
