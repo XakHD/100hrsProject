@@ -4966,3 +4966,5 @@ export type UserUpdateInput = {
     role?: InputMaybe<Role>;
     timezone?: InputMaybe<Scalars["String"]["input"]>;
 };
+
+

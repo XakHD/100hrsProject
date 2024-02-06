@@ -3,7 +3,7 @@ import { BrowserRouter, Outlet, Route, Routes } from "react-router-dom";
 import { ErrorComponent, useNotificationProvider } from "@refinedev/antd";
 import { Authenticated, Refine } from "@refinedev/core";
 import { DevtoolsPanel, DevtoolsProvider } from "@refinedev/devtools";
-import routerBindings, {
+import routerProvider, {
     CatchAllNavigate,
     DocumentTitleHandler,
     NavigateToResource,
@@ -76,8 +76,6 @@ import {  } from "./routes/login";
 import {  } from "./routes/register";
 import {  } from "./routes/update-password";
 import { AuthPage, RefineThemes, ThemedLayoutV2 } from "@refinedev/antd";
-
-
 const App: React.FC = () => {
     // This hook is used to automatically login the user.
     // We use this hook to skip the login page and demonstrate the application more quickly.
@@ -94,19 +92,39 @@ const App: React.FC = () => {
                     <AntdApp>
                         <DevtoolsProvider>
                         <Refine
-                       
-                       notificationProvider={useNotificationProvider}
-                       dataProvider={dataProvider}
-                       liveProvider={liveProvider(supabaseClient)}
-                       authProvider={authProvider}
-                       routerProvider={routerBindings}
-                       resources={resources}
-                       options={{
-                         syncWithLocation: true,
-                         warnWhenUnsavedChanges: true,
-                         useNewQueryKeys: true,
-                         projectId: "yHpdZQ-iUtMEO-up9i7p",
-                       }}
+               
+              
+               authProvider={authProvider}
+               dataProvider={dataProvider}
+               liveProvider={liveProvider(supabaseClient)}
+               routerProvider={routerProvider}
+               resources={resources}
+               notificationProvider={useNotificationProvider}
+               options={{
+                //  syncWithLocation: true,
+                //  warnWhenUnsavedChanges: true,
+                //  useNewQueryKeys: true,
+                //  projectId: "WVyLEd-4karEq-tItoeC",
+                syncWithLocation: true,
+                warnWhenUnsavedChanges: true,
+                liveMode: "auto",
+                useNewQueryKeys: true,
+               }}
+
+
+                    //    notificationProvider={useNotificationProvider}
+                    //    dataProvider={dataProvider(supabaseClient)}
+                    //    liveProvider={liveProvider(supabaseClient)}
+                    //    authProvider={authProvider}
+                    //    routerProvider={routerProvider}
+                    //    resources={resources}
+                    //    options={{
+                    //      liveMode: "auto",
+                    //      syncWithLocation: true,
+                    //      warnWhenUnsavedChanges: true,
+                    //      useNewQueryKeys: true,
+                    //      projectId: "yHpdZQ-iUtMEO-up9i7p",
+                    //    }}
                      >
                               
                        
